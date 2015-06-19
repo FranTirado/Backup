@@ -1,0 +1,30 @@
+__author__ = 'Francisco Jose Tirado Martin'
+import os
+import shutil
+from datetime import datetime
+
+carpIni = raw_input("Introducir directorio de busqueda: ")
+carpDest = raw_input("Introducir directorio de carpeta de destino: ")
+
+if not os.path.isdir(carpDest): #Si no existe la carpeta de destino la crea
+    os.mkdir(carpDest)
+
+extensiones = []
+objlist = raw_input("Introducir extension de filtrado: ")
+extensiones.append(objlist)
+
+
+#Te lista los archivos filtrados del directorio proporcionado
+lista_archivos = [[os.path.join(root,file),root.split(carpIni)[1]] for root,dirs,files in os.walk(carpIni) for file in files if os.path.splitext(file)[-1] in extensiones]
+
+now = datetime.now().strftime('%Y-%m-%d a las %H-%M-%S') #Genera un string con los datos de Anio-mes-dia-Hora-Minuto-Segundo
+carpeta_destino = os.path.join(carpDest,now)
+os.mkdir(carpeta_destino)
+
+for archivo in lista_archivos:
+    carpeta_fichero = carpeta_destino + archivo[1]
+    if not os.path.isdir(carpeta_fichero): #Creamos la carpeta si no existe
+        os.mkdir(carpeta_fichero)
+    shutil.copy(archivo[0], carpeta_fichero)
+
+raw_input("Pulsa enter")
